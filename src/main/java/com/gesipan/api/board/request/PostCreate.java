@@ -1,12 +1,13 @@
 package com.gesipan.api.board.request;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-@Setter
+@Setter @Getter
 public class PostCreate {
 
-    public String title;
-    public String content;
+    private String title;
+    private String content;
 }

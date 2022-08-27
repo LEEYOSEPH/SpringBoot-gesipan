@@ -37,4 +37,20 @@ class PostControllerTest {
                 .andExpect(content().string("hello World"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("/posts 요청시 title 값은 핖수다.")
+    public void test2() throws Exception{
+        // 글제목
+        // 글내용
+        // 사용자
+
+        mockMvc.perform(post("/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"\",\"content\":\"내용입니다.\"}")
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string("hello World"))
+                .andDo(print());
+    }
 }

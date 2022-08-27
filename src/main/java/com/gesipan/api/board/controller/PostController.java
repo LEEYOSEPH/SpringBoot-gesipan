@@ -11,9 +11,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     @PostMapping("/posts")
-    public String post(@RequestBody PostCreate params) {
+    public String post(@RequestBody PostCreate params) throws Exception {
 
         log.info("params={}",params.toString());
+
+        String title = params.getTitle();
+        if (title == null || title.equals("")) {
+            throw new Exception("타이틀 값이 없음");
+        }
+
+        String content = params.getContent();
+        if (content == null || content.equals("")) {
+            //error
+        }
+
         return "hello World";
     }
 }

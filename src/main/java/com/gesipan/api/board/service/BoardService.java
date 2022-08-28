@@ -14,9 +14,12 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public void write(BoardCreate postCreate) {
+    public void write(BoardCreate boardCreate) {
         // postCreate -> Entity
-        Board board = new Board(postCreate.getTitle(), postCreate.getContent());
+        Board board = Board.builder()
+                .title(boardCreate.getTitle())
+                .content(boardCreate.getContent())
+                .build();
 
         boardRepository.save(board);
     }

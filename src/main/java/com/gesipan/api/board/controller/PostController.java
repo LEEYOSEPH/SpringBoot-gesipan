@@ -2,29 +2,33 @@ package com.gesipan.api.board.controller;
 
 import com.gesipan.api.board.request.PostCreate;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
 public class PostController {
 
     @PostMapping("/posts")
-    public String post(@RequestBody PostCreate params) throws Exception {
+    public Map<String,String> post(@RequestBody @Valid PostCreate params , BindingResult result) {
+       if(result.hasErrors()) {
+           List<FieldError> fieldErrors = result.getFieldErrors();
+           FieldError firstFieldError = fieldErrors.get(0);
+           String fieldName = firstFieldError.getField();
+           String errorMessage = firstFieldError.getDefaultMessage(); // ..에러 메세지
 
-        log.info("params={}",params.toString());
-
-        String title = params.getTitle();
-        if (title == null || title.equals("")) {
-            throw new Exception("타이틀 값이 없음");
-        }
-
-        String content = params.getContent();
-        if (content == null || content.equals("")) {
-            //error
-        }
-
-        return "hello World";
+           Map<String,String> error = new HashMap<>();
+           error.put(fieldName, errorMessage);
+           return error;
+       }
+        return Map.of();
     }
 }

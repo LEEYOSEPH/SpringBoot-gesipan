@@ -1,5 +1,6 @@
 package com.gesipan.api.board.controller;
 
+import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.request.BoardCreate;
 import com.gesipan.api.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -19,8 +19,8 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/posts")
-    public Map<String,String> post(@RequestBody @Valid BoardCreate params ) {
-        boardService.write(params);
-        return Map.of();
+    public Board post(@RequestBody @Valid BoardCreate params ) {
+        // Case1. 저장한 데이터 Entity -> response로 응답하기
+        return boardService.write(params);
     }
 }

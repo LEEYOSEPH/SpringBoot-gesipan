@@ -14,13 +14,13 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public void write(BoardCreate boardCreate) {
+    public Board write(BoardCreate boardCreate) {
         // postCreate -> Entity
         Board board = Board.builder()
                 .title(boardCreate.getTitle())
                 .content(boardCreate.getContent())
                 .build();
 
-        boardRepository.save(board);
+       return boardRepository.save(board);
     }
 }

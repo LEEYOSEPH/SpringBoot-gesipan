@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -31,12 +33,20 @@ public class BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
 
-        BoardResponse response = BoardResponse.builder()
+        return BoardResponse.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .build();
+    }
 
-        return response;
+    public List<BoardResponse> getList() {
+        return boardRepository.findAll().stream()
+                .map(boards -> BoardResponse.builder()
+                                .id(boards.getId())
+                                .title(boards.getTitle())
+                                .content(boards.getContent())
+                                .build())
+        .collect(Collectors.toList());
     }
 }

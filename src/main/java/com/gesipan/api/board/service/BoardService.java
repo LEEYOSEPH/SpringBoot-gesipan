@@ -3,6 +3,7 @@ package com.gesipan.api.board.service;
 import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
+import com.gesipan.api.board.response.BoardResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,16 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public Board get(Long id) {
-        Board post = boardRepository.findById(id)
+    public BoardResponse get(Long id) {
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
-        return post;
+
+        BoardResponse response = BoardResponse.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .build();
+
+        return response;
     }
 }

@@ -85,7 +85,7 @@ class PostControllerTest {
     @DisplayName("/posts 요청시 db에 값이 저장된다.")
     public void test3() throws Exception {
         //given
-        // given
+        //given
         BoardCreate request = BoardCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
@@ -114,13 +114,13 @@ class PostControllerTest {
     void test4() throws  Exception{
         //given
         Board board = Board.builder()
-                .title("foo")
+                .title("123456789012345")
                 .content("bar")
                 .build();
         boardRepository.save(board);
 
         //expected
-        mockMvc.perform(post("/posts/{postId}", board.getId())
+        mockMvc.perform(get("/posts/{postId}", board.getId())
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())

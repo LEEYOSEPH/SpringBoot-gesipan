@@ -3,6 +3,7 @@ package com.gesipan.api.board.service;
 import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
+import com.gesipan.api.board.response.BoardResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -58,12 +59,12 @@ class BoardServiceTest {
         boardRepository.save(requsetPost);
 
         //when
-        Board board = boardService.get(requsetPost.getId());
+        BoardResponse response = boardService.get(requsetPost.getId());
 
         //then
-        assertNotNull(board);
+        assertNotNull(response);
         assertEquals(1L,boardRepository.count());
-        assertEquals("foo",board.getTitle());
-        assertEquals("bar",board.getContent());
+        assertEquals("foo",response.getTitle());
+        assertEquals("bar",response.getContent());
     }
 }

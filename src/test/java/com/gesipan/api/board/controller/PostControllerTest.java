@@ -38,7 +38,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("/posts 요청시 Hello World를 출력ㅎ한다")
-    public void test() throws Exception{
+    public void test() throws Exception {
         // given
         BoardCreate request = BoardCreate.builder()
                 .title("제목입니다.")
@@ -58,7 +58,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("/posts 요청시 title 값은 핖수다.")
-    public void test2() throws Exception{
+    public void test2() throws Exception {
         // 글제목
         // 글내용
         // 사용자
@@ -83,7 +83,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("/posts 요청시 db에 값이 저장된다.")
-    public void test3() throws Exception{
+    public void test3() throws Exception {
         //given
         // given
         BoardCreate request = BoardCreate.builder()
@@ -102,10 +102,31 @@ class PostControllerTest {
                 .andDo(print());
 
         //then
-        assertEquals(1L,boardRepository.count());
+        assertEquals(1L, boardRepository.count());
 
         Board board = boardRepository.findAll().get(0);
-        assertEquals("제목입니다.",board.getTitle());
-        assertEquals("내용입니다.",board.getContent());
+        assertEquals("제목입니다.", board.getTitle());
+        assertEquals("내용입니다.", board.getContent());
+    }
+
+    @Test
+    @DisplayName("글 1개 조회")
+    void test4() throws  Exception{
+        //given
+        Board board = Board.builder()
+                .title("foo")
+                .content("bar")
+                .build();
+        boardRepository.save(board);
+
+        //expected
+        mockMvc.perform(post("/posts/{postId}", board.getId())
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(board.getId()))
+                .andExpect(jsonPath("$.title").value(board.getTitle()))
+                .andExpect(jsonPath("$.content").value(board.getContent()))
+                .andDo(print());
     }
 }

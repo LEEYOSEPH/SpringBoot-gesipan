@@ -1,5 +1,6 @@
 package com.gesipan.api.board.response;
 
+import com.gesipan.api.board.domain.Board;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,13 @@ public class BoardResponse {
     private final Long id;
     private final String title;
     private final String content;
+
+    //생성자 오버로딩
+    public BoardResponse(Board board) {
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+    }
 
     @Builder
     public BoardResponse(Long id, String title, String content) {

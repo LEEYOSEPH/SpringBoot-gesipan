@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -135,14 +137,14 @@ class PostControllerTest {
     void test5() throws  Exception{
         //given
         Board board1 = Board.builder()
-                .title("123456789012345")
-                .content("bar")
+                .title("title1")
+                .content("content1")
                 .build();
         boardRepository.save(board1);
 
         Board board2 = Board.builder()
-                .title("123456789012345")
-                .content("bar")
+                .title("title2")
+                .content("content2")
                 .build();
         boardRepository.save(board2);
 
@@ -151,6 +153,10 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$[0].id").value(board1.getId()))
+                .andExpect(jsonPath("$[0].title").value("title1"))
+                .andExpect(jsonPath("$[0].content").value("content1"))
                 .andDo(print());
     }
 }

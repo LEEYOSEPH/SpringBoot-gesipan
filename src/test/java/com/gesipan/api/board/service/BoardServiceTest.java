@@ -74,17 +74,16 @@ class BoardServiceTest {
     @DisplayName("글 여러개 조회")
     void test3() {
         //given
-        Board requsetPost1 = Board.builder()
-                .title("foo1")
-                .content("bar1")
-                .build();
-        boardRepository.save(requsetPost1);
-
-        Board requsetPost2 = Board.builder()
-                .title("foo2")
-                .content("bar2")
-                .build();
-        boardRepository.save(requsetPost2);
+        boardRepository.saveAll(List.of(
+                Board.builder()
+                    .title("foo1")
+                    .content("bar1")
+                    .build(),
+                Board.builder()
+                    .title("foo2")
+                    .content("bar2")
+                    .build()
+        ));
 
         //when
         List<BoardResponse> posts = boardService.getList();

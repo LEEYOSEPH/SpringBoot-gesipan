@@ -42,11 +42,7 @@ public class BoardService {
 
     public List<BoardResponse> getList() {
         return boardRepository.findAll().stream()
-                .map(boards -> BoardResponse.builder()
-                                .id(boards.getId())
-                                .title(boards.getTitle())
-                                .content(boards.getContent())
-                                .build())
-        .collect(Collectors.toList());
+                .map(BoardResponse::new)
+                .collect(Collectors.toList());
     }
 }

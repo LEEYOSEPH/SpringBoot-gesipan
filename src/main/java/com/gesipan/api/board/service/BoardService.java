@@ -6,6 +6,9 @@ import com.gesipan.api.board.request.BoardCreate;
 import com.gesipan.api.board.response.BoardResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +43,8 @@ public class BoardService {
                 .build();
     }
 
-    public List<BoardResponse> getList() {
-        return boardRepository.findAll().stream()
+    public List<BoardResponse> getList(Pageable pageable) {
+        return boardRepository.findAll(pageable).stream()
                 .map(BoardResponse::new)
                 .collect(Collectors.toList());
     }

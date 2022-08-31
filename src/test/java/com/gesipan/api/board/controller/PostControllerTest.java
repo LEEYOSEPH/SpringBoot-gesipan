@@ -13,6 +13,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static com.gesipan.api.board.domain.Board.builder;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;
@@ -136,27 +141,19 @@ class PostControllerTest {
     @DisplayName("글 여러개 조회")
     void test5() throws  Exception{
         //given
-        Board board1 = Board.builder()
-                .title("title1")
-                .content("content1")
-                .build();
-        boardRepository.save(board1);
-
-        Board board2 = Board.builder()
-                .title("title2")
-                .content("content2")
-                .build();
-        boardRepository.save(board2);
+        List<Board> requestPosts = IntStream.range(1, 31)
+                .mapToObj(i -> builder()
+                        .title("게시판 제목 " + i)
+                        .content("게시글 내용 " + i)
+                        .build())
+                .collect(Collectors.toList());
+        boardRepository.saveAll(requestPosts);
 
         //expected
-        mockMvc.perform(get("/posts")
+        mockMvc.perform(get("/posts?page=1")
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(2)))
-                .andExpect(jsonPath("$[0].id").value(board1.getId()))
-                .andExpect(jsonPath("$[0].title").value("title1"))
-                .andExpect(jsonPath("$[0].content").value("content1"))
                 .andDo(print());
     }
 }

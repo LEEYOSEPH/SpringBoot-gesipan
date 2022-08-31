@@ -2,7 +2,7 @@ spring: #띄어쓰기 없음
   profiles:
     active: local
   datasource: #띄어쓰기 2칸
-    url: jdbc:h2:tcp://localhost/~/gesipan #4칸
+    url: jdbc:h2:tcp://localhost/~/querydsl #4칸
     username: sa
     password:
     driver-class-name: org.h2.Driver

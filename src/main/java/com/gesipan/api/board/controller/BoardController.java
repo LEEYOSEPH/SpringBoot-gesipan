@@ -6,6 +6,8 @@ import com.gesipan.api.board.response.BoardResponse;
 import com.gesipan.api.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,8 +32,8 @@ public class BoardController {
 
 
     @GetMapping("/posts")
-    public List<BoardResponse> getList() {
-        return boardService.getList();
+    public List<BoardResponse> getList(@PageableDefault Pageable pageable) {
+        return boardService.getList(pageable);
     }
 
 }

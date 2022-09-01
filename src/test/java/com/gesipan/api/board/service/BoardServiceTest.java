@@ -150,4 +150,22 @@ class BoardServiceTest {
                 .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id=" + board.getId()));
         assertEquals("수정한 제목",changedBoard.getTitle());
     }
+
+    @Test
+    @DisplayName("글 삭제")
+    void test7() {
+        //given
+        Board board = builder()
+                .title("게시판 제목 ")
+                .content("게시글 내용 ")
+                .build();
+        boardRepository.save(board);
+
+        //when
+        boardService.delete(board.getId());
+
+        //then
+        assertEquals(0, boardRepository.count());
+
+    }
 }

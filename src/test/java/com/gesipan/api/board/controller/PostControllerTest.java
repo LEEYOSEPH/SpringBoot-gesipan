@@ -150,7 +150,27 @@ class PostControllerTest {
         boardRepository.saveAll(requestPosts);
 
         //expected
-        mockMvc.perform(get("/posts?page=1")
+        mockMvc.perform(get("/posts?page=1&size=10")
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("페이지를 0으로 조회")
+    void test6() throws  Exception{
+        //given
+        List<Board> requestPosts = IntStream.range(1, 31)
+                .mapToObj(i -> builder()
+                        .title("게시판 제목 " + i)
+                        .content("게시글 내용 " + i)
+                        .build())
+                .collect(Collectors.toList());
+        boardRepository.saveAll(requestPosts);
+
+        //expected
+        mockMvc.perform(get("/posts?page=0&size=10")
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())

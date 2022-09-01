@@ -3,6 +3,7 @@ package com.gesipan.api.board.service;
 import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
+import com.gesipan.api.board.request.BoardSearch;
 import com.gesipan.api.board.response.BoardResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +44,8 @@ public class BoardService {
                 .build();
     }
 
-    public List<BoardResponse> getList(Pageable pageable) {
-        return boardRepository.findAll(pageable).stream()
+    public List<BoardResponse> getList(BoardSearch boardSearch) {
+        return boardRepository.getList(boardSearch).stream()
                 .map(BoardResponse::new)
                 .collect(Collectors.toList());
     }

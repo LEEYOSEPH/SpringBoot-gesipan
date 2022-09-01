@@ -3,6 +3,7 @@ package com.gesipan.api.board.service;
 import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
+import com.gesipan.api.board.request.BoardSearch;
 import com.gesipan.api.board.response.BoardResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,7 +81,7 @@ class BoardServiceTest {
     @DisplayName("글 1페이지 조회")
     void test3() {
         //given
-        List<Board> requestPosts = IntStream.range(1, 31)
+        List<Board> requestPosts = IntStream.range(0, 20)
                 .mapToObj(i -> builder()
                         .title("게시판 제목 " + i)
                         .content("게시글 내용 " + i)
@@ -88,13 +89,15 @@ class BoardServiceTest {
                 .collect(Collectors.toList());
         boardRepository.saveAll(requestPosts);
 
-        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC,"id");
+        BoardSearch boardSearch = BoardSearch.builder()
+                .page(1)
+                .build();
 
         //when
-        List<BoardResponse> posts = boardService.getList(pageable);
+        List<BoardResponse> posts = boardService.getList(boardSearch);
 
         //then
-        assertEquals(5L,posts.size());
-        assertEquals("게시판 제목 30",posts.get(0).getTitle());
+        assertEquals(10L,posts.size());
+        assertEquals("게시판 제목 19",posts.get(0).getTitle());
     }
 }

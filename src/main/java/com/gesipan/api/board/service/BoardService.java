@@ -2,6 +2,7 @@ package com.gesipan.api.board.service;
 
 import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.domain.BoardEditor;
+import com.gesipan.api.board.exception.BoardNotFound;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
 import com.gesipan.api.board.request.BoardEdit;
@@ -38,7 +39,7 @@ public class BoardService {
 
     public BoardResponse get(Long id) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(BoardNotFound::new);
 
         return BoardResponse.builder()
                 .id(board.getId())
@@ -56,7 +57,7 @@ public class BoardService {
     @Transactional
     public void edit(Long id, BoardEdit boardEdit) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(BoardNotFound::new);
 
         BoardEditor.BoardEditorBuilder editorBuilder = board.toEditor();
 
@@ -69,7 +70,7 @@ public class BoardService {
 
     public void delete(Long id) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(BoardNotFound::new);
 
         boardRepository.delete(board);
 

@@ -212,7 +212,7 @@ class PostControllerTest {
         boardRepository.save(board);
 
         //expected
-        mockMvc.perform(delete("/posts",board.getId())
+        mockMvc.perform(delete("/posts/{postId}",board.getId())
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())

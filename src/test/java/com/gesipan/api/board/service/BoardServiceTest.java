@@ -1,6 +1,7 @@
 package com.gesipan.api.board.service;
 
 import com.gesipan.api.board.domain.Board;
+import com.gesipan.api.board.exception.BoardNotFound;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
 import com.gesipan.api.board.request.BoardEdit;
@@ -166,6 +167,43 @@ class BoardServiceTest {
 
         //then
         assertEquals(0, boardRepository.count());
+
+    }
+
+
+    @Test
+    @DisplayName("글 1개 조회")
+    void test8() {
+        //given
+        Board board = builder()
+                .title("치킨")
+                .content("피자")
+                .build();
+        boardRepository.save(board);
+
+        //expected
+        assertThrows(BoardNotFound.class, () -> {
+            boardService.get(board.getId() + 1);
+        });
+    }
+
+    @Test
+    @DisplayName("글 삭제 - 존재하지 않는글")
+    void test9() {
+        //given
+        Board board = builder()
+                .title("게시판 제목 ")
+                .content("게시글 내용 ")
+                .build();
+        boardRepository.save(board);
+
+        //when
+        boardService.delete(board.getId()+1L);
+
+        //expected
+        assertThrows(BoardNotFound.class, () -> {
+            boardService.delete(board.getId() + 1);
+        });
 
     }
 }

@@ -1,8 +1,10 @@
 package com.gesipan.api.board.service;
 
 import com.gesipan.api.board.domain.Board;
+import com.gesipan.api.board.domain.BoardEditor;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
+import com.gesipan.api.board.request.BoardEdit;
 import com.gesipan.api.board.request.BoardSearch;
 import com.gesipan.api.board.response.BoardResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,5 +51,19 @@ public class BoardService {
         return boardRepository.getList(boardSearch).stream()
                 .map(BoardResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void edit(Long id, BoardEdit boardEdit) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        BoardEditor.BoardEditorBuilder editorBuilder = board.toEditor();
+
+        BoardEditor boardEditor = editorBuilder.title(boardEdit.getTitle())
+                .content(boardEdit.getContent())
+                .build();
+
+        board.edit(boardEditor);
     }
 }

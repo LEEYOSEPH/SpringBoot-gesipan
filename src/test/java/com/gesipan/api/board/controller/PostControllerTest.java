@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
+import com.gesipan.api.board.request.BoardEdit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -172,6 +173,29 @@ class PostControllerTest {
         //expected
         mockMvc.perform(get("/posts?page=0&size=10")
                         .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test7() throws  Exception{
+        //given
+        Board board = builder()
+                .title("게시판 제목 ")
+                .content("게시글 내용 ")
+                .build();
+        boardRepository.save(board);
+
+        BoardEdit boardEdit = BoardEdit.builder()
+                .title("수정한 제목")
+                .build();
+
+        //expected
+        mockMvc.perform(patch("/posts/{postId}",board.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(boardEdit))
                 )
                 .andExpect(status().isOk())
                 .andDo(print());

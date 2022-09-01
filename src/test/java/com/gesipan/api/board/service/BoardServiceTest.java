@@ -3,6 +3,7 @@ package com.gesipan.api.board.service;
 import com.gesipan.api.board.domain.Board;
 import com.gesipan.api.board.repository.BoardRepository;
 import com.gesipan.api.board.request.BoardCreate;
+import com.gesipan.api.board.request.BoardEdit;
 import com.gesipan.api.board.request.BoardSearch;
 import com.gesipan.api.board.response.BoardResponse;
 import org.junit.jupiter.api.Assertions;
@@ -99,5 +100,54 @@ class BoardServiceTest {
         //then
         assertEquals(10L,posts.size());
         assertEquals("게시판 제목 19",posts.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() {
+        //given
+
+        Board board = builder()
+                .title("게시판 제목 ")
+                .content("게시글 내용 ")
+                .build();
+        boardRepository.save(board);
+
+        BoardEdit boardEdit = BoardEdit.builder()
+                .title("수정한 제목")
+                .build();
+
+
+        //when
+        boardService.edit(board.getId(),boardEdit);
+
+        //then
+        Board changedBoard = boardRepository.findById(board.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id=" + board.getId()));
+        assertEquals("수정한 제목",changedBoard);
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test5() {
+        //given
+        Board board = builder()
+                .title("게시판 제목 ")
+                .content("게시글 내용 ")
+                .build();
+        boardRepository.save(board);
+
+        BoardEdit boardEdit = BoardEdit.builder()
+                .title("수정한 제목")
+                .build();
+
+
+        //when
+        boardService.edit(board.getId(),boardEdit);
+
+        //then
+        Board changedBoard = boardRepository.findById(board.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id=" + board.getId()));
+        assertEquals("수정한 제목",changedBoard.getTitle());
     }
 }

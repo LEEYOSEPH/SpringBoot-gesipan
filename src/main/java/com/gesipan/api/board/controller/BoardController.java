@@ -1,11 +1,13 @@
 package com.gesipan.api.board.controller;
 
 import com.gesipan.api.board.request.BoardCreate;
+import com.gesipan.api.board.request.BoardEdit;
 import com.gesipan.api.board.request.BoardSearch;
 import com.gesipan.api.board.response.BoardResponse;
 import com.gesipan.api.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,9 +31,15 @@ public class BoardController {
     }
 
 
+
     @GetMapping("/posts")
     public List<BoardResponse> getList(@ModelAttribute BoardSearch boardSearch ) {
         return boardService.getList(boardSearch);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public void edit(@PathVariable Long boardId, @RequestBody @Valid BoardEdit request) {
+        boardService.edit(boardId,request);
     }
 
 }

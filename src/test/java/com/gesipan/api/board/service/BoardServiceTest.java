@@ -206,23 +206,5 @@ class BoardServiceTest {
         });
 
     }
-    @Test
-    @DisplayName("글 삭제 - 존재하지 않는글")
-    void test10() {
-        //given
-        Board board = builder()
-                .title("게시판 제목 ")
-                .content("게시글 내용 ")
-                .build();
-        boardRepository.save(board);
 
-        //when
-        boardService.delete(board.getId()+1L);
-
-        //expected
-        assertThrows(BoardNotFound.class, () -> {
-            boardService.delete(board.getId() + 1);
-        });
-
-    }
 }
